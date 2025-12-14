@@ -1,5 +1,7 @@
-docker-compose down
-cd .\api
-docker-compose down
 cd ..
+
+docker-compose down
+
+cd build-scripts
+
 docker network inspect proxy

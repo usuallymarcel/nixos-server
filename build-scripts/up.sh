@@ -1,11 +1,9 @@
 docker network create proxy
 
-docker-compose up -d
-
-cd ./api
-
-docker-compose up -d
-
 cd ..
+
+docker-compose up -d
+
+cd build-scripts
 
 docker network inspect proxy

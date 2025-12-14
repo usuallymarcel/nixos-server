@@ -4,6 +4,7 @@ services:
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
@@ -12,7 +13,22 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - proxy
-      
+
+  fastapi:
+    build:
+      context: ./api
+    container_name: fastapi
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api"
+      - "traefik.http.routers.api.middlewares=api-stripprefix"
+      - "traefik.http.services.api.loadbalancer.server.port=8000"
+    networks:
+      - proxy
+
 networks:
   proxy:
     external: true
