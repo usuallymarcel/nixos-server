@@ -40,13 +40,13 @@ services:
       - proxy
 
   db:
-    image: postgres
+    image: postgres:18
     container_name: postgres_db
     restart: unless-stopped
     env_file:
       - .env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
     networks:
       - proxy
 
