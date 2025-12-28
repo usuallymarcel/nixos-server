@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat</title>
+    </head>
+    <body>
+        <div style="height:300px;overflow-y:auto;border:1px solid black;padding:10px;">
+        <ul id='messages'>
+        </ul>
+        </div>
+        <h2>Your ID: <span id="ws-id"></span></h2>
+        <form action="" onsubmit="sendMessage(event)">
+            <input type="text" id="messageText" autocomplete="off"/>
+            <button>Send</button>
+        </form>
+        <script src="static/script.js"></script>
+        <style src="static/styles.css"></style>
+    </body>
+</html>

@@ -1,51 +1,9 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 
 app = FastAPI()
-
-html = """
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Chat</title>
-    </head>
-    <body>
-        <h1>WebSocket Chat</h1>
-        <div style="height:300px;overflow-y:auto;border:1px solid black;padding:10px;">
-        <ul id='messages'>
-        </ul>
-        </div>
-        <h2>Your ID: <span id="ws-id"></span></h2>
-        <form action="" onsubmit="sendMessage(event)">
-            <input type="text" id="messageText" autocomplete="off"/>
-            <button>Send</button>
-        </form>
-        <script>
-            var client_id = Date.now()
-            document.querySelector("#ws-id").textContent = client_id;
-
-            const protocol = location.protocol === "https:" ? "wss://" : "ws://";
-            var ws = new WebSocket(protocol + location.host + `/ws/${client_id}`);
-
-            ws.onmessage = function(event) {
-                var messages = document.getElementById('messages')
-                var message = document.createElement('li')
-                message.textContent = event.data
-                messages.appendChild(message)
-                message.scrollIntoView({ behavior: 'smooth', block: 'end' })
-            };
-
-            function sendMessage(event) {
-                var input = document.getElementById("messageText")
-                ws.send(input.value)
-                input.value = ''
-                event.preventDefault()
-            }
-        </script>
-    </body>
-</html>
-"""
-
 
 class ConnectionManager:
     def __init__(self):
@@ -69,21 +27,25 @@ class ConnectionManager:
 manager = ConnectionManager()
 messages = []
 
+BASE_DIR = Path(__file__).resolve().parent
+
+app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
+
 @app.get("/")
-async def get():
-    return HTMLResponse(html)
+async def index():
+    return FileResponse(BASE_DIR / "static" / "index.html")
 
 
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: int):
-    client_join_msg = f"Client #{client_id} joined the chat"
-    client_leave_msg = f"Client #{client_id} left the chat"
+    # client_join_msg = f"Client #{client_id} joined the chat"
+    # client_leave_msg = f"Client #{client_id} left the chat"
 
     await manager.connect(websocket)
     for msg in messages:
         await manager.send_personal_message(msg, websocket)
-    await manager.broadcast(client_join_msg)
-    messages.append(client_join_msg)
+    # await manager.broadcast(client_join_msg)
+    # messages.append(client_join_msg)
     try:
         while True:
             data = await websocket.receive_text()
@@ -92,5 +54,5 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
             messages.append(client_says_msg)
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        await manager.broadcast(client_leave_msg)
-        messages.append(client_leave_msg)
+        # await manager.broadcast(client_leave_msg)
+        # messages.append(client_leave_msg)
