@@ -2,6 +2,10 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
+import os
+
+DATABASE_URL = os.environ["DATABASE_URL"]
+
 
 app = FastAPI()
 
