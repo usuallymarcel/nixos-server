@@ -1,5 +1,5 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import os
@@ -39,6 +39,14 @@ app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 @app.get("/")
 async def index():
     return FileResponse(BASE_DIR / "static" / "index.html")
+
+@app.get("/login")
+async def login_screen():
+    return FileResponse(BASE_DIR / "static" / "login" / "index.html" )
+
+@app.get("/config.js")
+async def config_js():
+    return Response(content=f"""window.ENV = {{API_URL: "{settings.api_url}"}};""", media_type="application/javascript")
 
 
 @app.websocket("/ws/{client_id}")

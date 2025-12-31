@@ -11,3 +11,7 @@ class UserRead(BaseModel):
 
     class Config:
         from_attributes = True
+
+class credentials(BaseModel):
+    email: str
+    password: str
