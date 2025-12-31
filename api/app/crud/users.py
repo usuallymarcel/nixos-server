@@ -10,7 +10,7 @@ def create_user(db: Session, email: str, name: str, password: str):
 
     user = User(email=email, 
                 name=name, 
-                hash_password=hashed_password, 
+                hashed_password=hashed_password, 
                 salt=salt, 
                 iterations=iterations)
     db.add(user)
