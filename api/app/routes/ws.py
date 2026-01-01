@@ -28,7 +28,7 @@ class ConnectionManager:
 manager = ConnectionManager()
 messages = []
 
-@router.websocket("/ws/{client_id}")
+@router.websocket("/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: int):
     # client_join_msg = f"Client #{client_id} joined the chat"
     # client_leave_msg = f"Client #{client_id} left the chat"

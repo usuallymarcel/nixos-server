@@ -14,7 +14,7 @@ app.include_router(ws.router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8000", "https://api.marcel.co.nz"],
+    allow_origins=["http://localhost:8000", "api.marcel.co.nz"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
