@@ -4,8 +4,8 @@ from datetime import datetime
 
 from app.database import Base
 
-class Session(Base):
-    __tablename__ = "sessions"
+class Session_Token(Base):
+    __tablename__ = "session_tokens"
 
     id: Mapped[str] = mapped_column(
         String(64), 
