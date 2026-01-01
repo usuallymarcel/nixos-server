@@ -19,6 +19,8 @@ def get_session_from_request(db: Session, request: Request) -> Session_Token:
         db.refresh()
         raise HTTPException(status_code=401, detail="Session expired")
     
+    refresh_session_if_needed(db, session)
+
     return session
 
 def refresh_session_if_needed(db: Session, session: Session_Token):
