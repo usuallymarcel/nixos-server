@@ -21,5 +21,8 @@ def create_user(db: Session, email: str, name: str, password: str):
 def get_users(db: Session):
     return db.query(User).all()
 
+def get_user_by_id(db: Session, id: int):
+    return db.query(User).filter(User.id == id).first()
+
 # def get_email(email: str, db: Session):
 #     return db.query(User).where(User.email == email).first()

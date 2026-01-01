@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.dependencies import get_db
 from app.schemas.user import UserCreate, UserRead, credentials
-from app.crud.users import get_user_by_email, create_user, get_users
+from app.crud.users import get_user_by_email, create_user, get_users, get_user_by_id
 from app.crud.session_tokens import create_session
 from app.utils.credentials import verify_password
 from app.utils.session_token import get_session_from_request, refresh_session_if_needed
@@ -80,3 +80,11 @@ def logout(request: Request, response: Response, db: Session = Depends(get_db)):
 
     response.delete_cookie("session_id")
     return {"ok": True, "logged out": True}
+
+@router.get("/username")
+def logout(request: Request, db: Session = Depends(get_db)):
+    session = get_session_from_request(db, request)
+    user = get_user_by_id(db, session.user_id)
+
+    return {"username": user.name}
+    
