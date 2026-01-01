@@ -26,6 +26,7 @@ if config.config_file_name is not None:
 from app.database import Base
 from app.models.user import User
 from app.models.session_token import Session_Token
+from app.models.friends import Friend
 from app.config import settings
 
 target_metadata = Base.metadata
