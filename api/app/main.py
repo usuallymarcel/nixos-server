@@ -5,11 +5,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import os
 from app.config import settings
-from app.routes import users
+from app.routes import ws, users
 
 app = FastAPI()
 
 app.include_router(users.router)
+app.include_router(ws.router)
 
 app.add_middleware(
     CORSMiddleware,
